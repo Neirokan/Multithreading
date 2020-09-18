@@ -7,16 +7,16 @@ namespace L2
 {
 	namespace X
 	{
-		// Вычисление и вывод числе Фибоначчи
+		// Р’С‹С‡РёСЃР»РµРЅРёРµ Рё РІС‹РІРѕРґ С‡РёСЃР»Рµ Р¤РёР±РѕРЅР°С‡С‡Рё
 		void fibonacci(const char* filename)
 		{
-			// Проверка открытия файла
+			// РџСЂРѕРІРµСЂРєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°
 			std::ofstream fout;
 			if (filename)
 				fout.open(filename);
 			std::ostream& out = fout.is_open() ? fout : std::cout;
 
-			// Вычисление и вывод
+			// Р’С‹С‡РёСЃР»РµРЅРёРµ Рё РІС‹РІРѕРґ
 			uint16_t a, b, i;
 			out << "1 1";
 			for (a = 1, b = 1, i = 2; i < 12; i++)
@@ -27,12 +27,12 @@ namespace L2
 			}
 			out << std::endl;
 
-			// Закрытие файла
+			// Р—Р°РєСЂС‹С‚РёРµ С„Р°Р№Р»Р°
 			if (fout.is_open())
 				fout.close();
 		}
 
-		// Ожидает завершения вычисления чисел Фибоначчи и пишет об этом
+		// РћР¶РёРґР°РµС‚ Р·Р°РІРµСЂС€РµРЅРёСЏ РІС‹С‡РёСЃР»РµРЅРёСЏ С‡РёСЃРµР» Р¤РёР±РѕРЅР°С‡С‡Рё Рё РїРёС€РµС‚ РѕР± СЌС‚РѕРј
 		void waiter(const char* filename)
 		{
 			std::thread t(fibonacci, filename);
@@ -40,20 +40,20 @@ namespace L2
 			std::cout << "Fibonacci function finished." << std::endl;
 		}
 
-		// Дописывает сумму чисел в файле в конец файла
+		// Р”РѕРїРёСЃС‹РІР°РµС‚ СЃСѓРјРјСѓ С‡РёСЃРµР» РІ С„Р°Р№Р»Рµ РІ РєРѕРЅРµС† С„Р°Р№Р»Р°
 		void sum_appender(const char* filename)
 		{
-			// Проверка открытия файла
+			// РџСЂРѕРІРµСЂРєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°
 			std::fstream f;
 			if (!filename || (f.open(filename, std::ios::in | std::ios::out), !f.is_open()))
 				return;
 
-			// Считывание и суммирование чисел
+			// РЎС‡РёС‚С‹РІР°РЅРёРµ Рё СЃСѓРјРјРёСЂРѕРІР°РЅРёРµ С‡РёСЃРµР»
 			uint16_t sum = 0, tmp;
 			while (f >> tmp)
 				sum += tmp;
 
-			// Вывод суммы и закрытие файла
+			// Р’С‹РІРѕРґ СЃСѓРјРјС‹ Рё Р·Р°РєСЂС‹С‚РёРµ С„Р°Р№Р»Р°
 			f.clear();
 			f << sum << std::endl;
 			f.close();
