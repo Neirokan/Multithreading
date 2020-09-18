@@ -15,9 +15,13 @@ namespace L3
 {
 	void reader(std::string& filename)
 	{
-		std::ifstream fout(filename);
-		if (!fout.is_open())
+		std::ifstream fin(filename);
+		if (!fin.is_open())
 			return;
+        
+        char ch;
+
+        while (fin >> ch) {}
 
 		std::cout << "Поток 2 закончил свою работу." << std::endl;
 	}
@@ -27,12 +31,13 @@ namespace L3
 		std::string filename;
 		std::cout << "Введите имя файла: ";
 		std::getline(std::cin >> std::ws, filename);
+        filename += ".txt";
 		std::ofstream fout(filename);
 		if (!fout.is_open())
 			return;
 
 		for (uint32_t i = rand() % 100 + 10; i > 0; i--)
-			fout << char(rand() % 100 + 100);
+			fout << char(rand() % 95 + 32);
 
 		fout.close();
 
@@ -46,7 +51,8 @@ namespace L3
 
 	int main()
 	{
-
+        std::thread t (writer);
+        t.join();
 		std::cin.get();
 		return 0;
 	}
