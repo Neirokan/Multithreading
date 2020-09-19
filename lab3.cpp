@@ -11,6 +11,7 @@
 #include <fstream>
 #include <thread>
 #include <algorithm>
+#include <random>
 
 namespace L3
 {
@@ -45,8 +46,12 @@ namespace L3
 		if (!fout.is_open())
 			return;
 
-		for (uint32_t i = rand() % 100 + 10; i > 0; i--)
-			fout << char(rand() % 95 + 32);
+		std::random_device rd;
+		std::mt19937 mt(rd());
+		std::uniform_int_distribution<uint16_t> dist(32, 126);
+
+		for (uint16_t i = dist(mt); i > 0; i--)
+			fout << static_cast<char>(dist(mt));
 
 		fout.close();
 
