@@ -13,6 +13,8 @@
 #include <algorithm>
 #include <random>
 
+#include "pcg/pcg_random.hpp"
+
 namespace L3
 {
 	inline bool has_extension(const std::string& str)
@@ -46,12 +48,12 @@ namespace L3
 		if (!fout.is_open())
 			return;
 
-		std::random_device rd;
-		std::mt19937 mt(rd());
+		pcg_extras::seed_seq_from<std::random_device> seed_source;
+		pcg32 rng(seed_source);
 		std::uniform_int_distribution<uint16_t> dist(32, 126);
 
-		for (uint16_t i = dist(mt); i > 0; i--)
-			fout << static_cast<char>(dist(mt));
+		for (uint16_t i = dist(rng); i > 0; i--)
+			fout << static_cast<char>(dist(rng));
 
 		fout.close();
 
