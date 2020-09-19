@@ -14,6 +14,13 @@
 
 namespace L3
 {
+	inline bool has_extension(const std::string& str)
+	{
+		size_t sep = str.find_last_of("\\/");
+		size_t dot = str.find_last_of('.');
+		return dot != str.npos && (sep == str.npos || dot > sep);
+	}
+
 	void reader(std::string& filename)
 	{
 		std::ifstream fin(filename);
@@ -32,7 +39,8 @@ namespace L3
 		std::string filename;
 		std::cout << "Введите имя файла: ";
 		std::getline(std::cin >> std::ws, filename);
-		filename += ".txt";
+		if (!has_extension(filename))
+			filename += ".txt";
 		std::ofstream fout(filename);
 		if (!fout.is_open())
 			return;
