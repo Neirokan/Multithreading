@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GLOBAL_LAB_HEADER_H
+#define GLOBAL_LAB_HEADER_H
 #include <string>
 
 namespace L1
@@ -37,3 +38,5 @@ namespace L3
 	void writer();
 	int main();
 }
+
+#endif // GLOBAL_LAB_HEADER_H
