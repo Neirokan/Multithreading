@@ -7,7 +7,7 @@ namespace L1
 	void hello()
 	{
 		setlocale(LC_ALL, "russian");
-		std::cout << "Çäðàâñòâóé, ïàðàëëåëüíûé ìèð\n";
+		std::cout << "Ð—Ð´Ñ€Ð°Ð²ÑÑ‚Ð²ÑƒÐ¹, Ð¿Ð°Ñ€Ð°Ð»Ð»ÐµÐ»ÑŒÐ½Ñ‹Ð¹ Ð¼Ð¸Ñ€\n";
 	}
 
 	int main()

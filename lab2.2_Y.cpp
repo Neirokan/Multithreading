@@ -28,7 +28,7 @@ namespace L2
 			std::thread f(fib, name);
 			f.join();
 			setlocale(LC_ALL, "russian");
-			std::cout << "Поток закончил работу." << std::endl;
+			std::cout << "РџРѕС‚РѕРє Р·Р°РєРѕРЅС‡РёР» СЂР°Р±РѕС‚Сѓ." << std::endl;
 		}
 
 		void app(std::string name)
@@ -42,7 +42,7 @@ namespace L2
 				f << ' ' << sum;
 				f.close();
 			}
-			std::cout << "Поток дополнил файл." << std::endl;
+			std::cout << "РџРѕС‚РѕРє РґРѕРїРѕР»РЅРёР» С„Р°Р№Р»." << std::endl;
 		}
 
 		int main()
