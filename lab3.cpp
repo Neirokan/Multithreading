@@ -6,7 +6,7 @@
  * завершает свою работу.
  */
 
-#include "global_lab_header.h"
+#include "global_lab_header.hpp"
 #include <iostream>
 #include <fstream>
 #include <thread>
