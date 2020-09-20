@@ -13,13 +13,15 @@
 #include <algorithm>
 #include <random>
 
+#include "pcg/pcg_random.hpp"
+
 namespace L3
 {
 	inline bool has_extension(const std::string& str)
 	{
 		size_t sep = str.find_last_of("\\/");
 		size_t dot = str.find_last_of('.');
-		return (dot != str.npos) && (sep == str.npos || dot > sep);
+		return dot != str.npos && (sep == str.npos || dot > sep);
 	}
 
 	void reader(std::string& filename)
@@ -46,8 +48,8 @@ namespace L3
 		if (!fout.is_open())
 			return;
 
-		std::random_device seed_source;
-		std::mt19937 rng(seed_source);
+		pcg_extras::seed_seq_from<std::random_device> seed_source;
+		pcg32 rng(seed_source);
 		std::uniform_int_distribution<uint16_t> dist(32, 126);
 
 		for (uint16_t i = dist(rng); i > 0; i--)
