@@ -23,7 +23,7 @@ namespace L3
 		{
 			size_t sep = str.find_last_of("\\/");
 			size_t dot = str.find_last_of('.');
-			return dot != str.npos && (sep == str.npos || dot > sep);
+			return (dot != str.npos) && (sep == str.npos || dot > sep);
 		}
 
 		void reader(std::string& filename)
