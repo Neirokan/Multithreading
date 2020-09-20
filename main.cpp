@@ -18,6 +18,6 @@ int main()
 	cout << "Lab 2.2 (Y)" << endl;
 	L2::Y2::main();
 	cout << "Lab 3" << endl;
-	L3::main();
+	L3::VS::main();
 	return 0;
 }

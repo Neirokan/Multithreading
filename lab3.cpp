@@ -15,59 +15,63 @@
 
 namespace L3
 {
-	inline bool has_extension(const std::string& str)
+	namespace VS
 	{
-		size_t sep = str.find_last_of("\\/");
-		size_t dot = str.find_last_of('.');
-		return (dot != str.npos) && (sep == str.npos || dot > sep);
-	}
+		inline bool has_extension(const std::string& str)
+		{
+			size_t sep = str.find_last_of("\\/");
+			size_t dot = str.find_last_of('.');
+			return (dot != str.npos) && (sep == str.npos || dot > sep);
+		}
 
-	void reader(std::string& filename)
-	{
-		std::ifstream fin(filename);
-		if (!fin.is_open())
-			return;
-		
-		char ch;
+		void reader(std::string& filename)
+		{
+			std::ifstream fin(filename);
+			if (!fin.is_open())
+				return;
+			
+			char ch;
 
-		while (fin >> ch) {}
+			while (fin >> ch) {}
 
-		std::cout << "Поток 2 закончил свою работу." << std::endl;
-	}
+			std::cout << "Поток 2 закончил свою работу." << std::endl;
+		}
 
-	void writer()
-	{
-		std::string filename;
-		std::cout << "Введите имя файла: ";
-		std::getline(std::cin >> std::ws, filename);
-		if (!has_extension(filename))
-			filename += ".txt";
-		std::ofstream fout(filename);
-		if (!fout.is_open())
-			return;
+		void writer()
+		{
+			std::string filename;
+			std::cout << "Введите имя файла: ";
+			std::getline(std::cin >> std::ws, filename);
+			if (!has_extension(filename))
+				filename += ".txt";
+			std::ofstream fout(filename);
+			if (!fout.is_open())
+				return;
 
-		std::random_device seed_source;
-		std::mt19937 rng(seed_source);
-		std::uniform_int_distribution<uint16_t> dist(32, 126);
+			std::random_device seed_source;
+			std::mt19937 rng(seed_source());
+			std::uniform_int_distribution<uint16_t> dist(32, 126);
 
-		for (uint16_t i = dist(rng); i > 0; i--)
-			fout << static_cast<char>(dist(rng));
+			for (uint16_t i = dist(rng); i > 0; i--)
+				fout << static_cast<char>(dist(rng));
+			fout << std::endl;
 
-		fout.close();
+			fout.close();
 
-		std::cout << "Поток 1 создал и записал файл." << std::endl;
+			std::cout << "Поток 1 создал и записал файл." << std::endl;
 
-		std::thread t(reader, std::ref(filename));
-		t.join();
+			std::thread t(reader, std::ref(filename));
+			t.join();
 
-		std::cout << "Поток 1 закончил свою работу." << std::endl;
-	}
+			std::cout << "Поток 1 закончил свою работу." << std::endl;
+		}
 
-	int main()
-	{
-		std::thread t (writer);
-		t.join();
-		std::cin.get();
-		return 0;
+		int main()
+		{
+			std::thread t (writer);
+			t.join();
+			std::cin.get();
+			return 0;
+		}
 	}
 }

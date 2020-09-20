@@ -34,9 +34,18 @@ namespace L2
 
 namespace L3
 {
-	void reader(std::string& filename);
-	void writer();
-	int main();
+	namespace VS
+	{
+		void reader(std::string& filename);
+		void writer();
+		int main();
+	}
+	namespace GCC
+	{
+		void reader(std::string& filename);
+		void writer();
+		int main();
+	}
 }
 
 #endif // GLOBAL_LAB_HEADER_H
