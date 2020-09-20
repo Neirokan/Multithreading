@@ -18,7 +18,6 @@ namespace L2
 		{
 			std::thread f(fib);
 			f.join();
-			setlocale(LC_ALL, "russian");
 			std::cout << "Поток закончил работу." << std::endl;
 		}
 
