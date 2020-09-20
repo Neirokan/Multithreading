@@ -54,14 +54,12 @@ namespace L3
 		std::cout << "Random type: PCG" << std::endl;
 		pcg_extras::seed_seq_from<std::random_device> seed_source;
 		pcg32 rng(seed_source);
-		std::uniform_int_distribution<uint16_t> dist(32, 126);
 #else
 		std::cout << "Random type: MT19937" << std::endl;
 		std::random_device seed_source;
 		std::mt19937 rng(seed_source());
-		std::uniform_int_distribution<uint16_t> dist(32, 126);
 #endif
-
+		std::uniform_int_distribution<uint16_t> dist(32, 126);
 		for (uint16_t i = dist(rng); i > 0; i--)
 			fout << static_cast<char>(dist(rng));
 		fout << std::endl;
