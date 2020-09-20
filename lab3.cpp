@@ -6,12 +6,16 @@
  * завершает свою работу.
  */
 
-#include "global_lab_header.h"
+#include "global_lab_header.hpp"
 #include <iostream>
 #include <fstream>
 #include <thread>
 #include <algorithm>
 #include <random>
+
+#if defined(__GNUC__) || defined(__MINGW32__)
+#include "pcg/pcg_random.hpp"
+#endif
 
 namespace L3
 {
@@ -19,7 +23,7 @@ namespace L3
 	{
 		size_t sep = str.find_last_of("\\/");
 		size_t dot = str.find_last_of('.');
-		return dot != str.npos && (sep == str.npos || dot > sep);
+		return (dot != str.npos) && (sep == str.npos || dot > sep);
 	}
 
 	void reader(std::string& filename)
@@ -27,7 +31,7 @@ namespace L3
 		std::ifstream fin(filename);
 		if (!fin.is_open())
 			return;
-		
+
 		char ch;
 
 		while (fin >> ch) {}
@@ -46,12 +50,21 @@ namespace L3
 		if (!fout.is_open())
 			return;
 
-		std::random_device rd;
-		std::mt19937 mt(rd());
+#if defined(__GNUC__) || defined(__MINGW32__)
+		std::cout << "Random type: PCG" << std::endl;
+		pcg_extras::seed_seq_from<std::random_device> seed_source;
+		pcg32 rng(seed_source);
 		std::uniform_int_distribution<uint16_t> dist(32, 126);
+#else
+		std::cout << "Random type: MT19937" << std::endl;
+		std::random_device seed_source;
+		std::mt19937 rng(seed_source());
+		std::uniform_int_distribution<uint16_t> dist(32, 126);
+#endif
 
-		for (uint16_t i = dist(mt); i > 0; i--)
-			fout << static_cast<char>(dist(mt));
+		for (uint16_t i = dist(rng); i > 0; i--)
+			fout << static_cast<char>(dist(rng));
+		fout << std::endl;
 
 		fout.close();
 
@@ -65,7 +78,7 @@ namespace L3
 
 	int main()
 	{
-		std::thread t (writer);
+		std::thread t(writer);
 		t.join();
 		std::cin.get();
 		return 0;

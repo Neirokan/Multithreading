@@ -1,4 +1,4 @@
-#include "global_lab_header.h"
+#include "global_lab_header.hpp"
 #include <iostream>
 #include <fstream>
 #include <thread>
@@ -12,13 +12,16 @@ namespace L2
 			std::ofstream f(name, std::ios::out);
 			if (f.is_open())
 			{
+				std::cout << 1 << ' ' << 1;
 				f << 1 << ' ' << 1;
 				for (int a = 1, b = 1, i = 3; i <= 12; i++)
 				{
 					a += b;
 					std::swap(a, b);
+					std::cout << ' ' << b;
 					f << ' ' << b;
 				}
+				std::cout << std::endl;
 				f.close();
 			}
 		}
@@ -27,7 +30,6 @@ namespace L2
 		{
 			std::thread f(fib, name);
 			f.join();
-			setlocale(LC_ALL, "russian");
 			std::cout << "Поток закончил работу." << std::endl;
 		}
 
@@ -39,7 +41,8 @@ namespace L2
 				int num, sum = 0;
 				while (f >> num) sum += num;
 				f.clear();
-				f << ' ' << sum;
+				std::cout << "Сумма : " << sum << std::endl;
+				f << " : " << sum << std::endl;
 				f.close();
 			}
 			std::cout << "Поток дополнил файл." << std::endl;
