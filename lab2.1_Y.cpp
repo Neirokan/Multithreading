@@ -8,10 +8,12 @@ namespace L2
 	{
 		void fib()
 		{
+			std::cout << 1 << ' ' << 1;
 			for (int a = 1, b = 1, i = 3; i <= 12; i++)
 			{
-				a += b; std::swap(a, b);
+				a += b; std::swap(a, b); std::cout << ' ' << b;
 			}
+			std::cout << std::endl;
 		}
 
 		void notify()
