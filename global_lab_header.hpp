@@ -1,5 +1,5 @@
-#ifndef GLOBAL_LAB_HEADER_H
-#define GLOBAL_LAB_HEADER_H
+#ifndef GLOBAL_LAB_HEADER_HPP
+#define GLOBAL_LAB_HEADER_HPP
 #include <string>
 
 namespace L1
@@ -39,4 +39,4 @@ namespace L3
 	int main();
 }
 
-#endif // GLOBAL_LAB_HEADER_H
+#endif // GLOBAL_LAB_HEADER_HPP
