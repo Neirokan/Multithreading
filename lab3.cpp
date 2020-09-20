@@ -13,65 +13,74 @@
 #include <algorithm>
 #include <random>
 
+#if defined(__GNUC__) || defined(__MINGW32__)
+#include "pcg/pcg_random.hpp"
+#endif
+
 namespace L3
 {
-	namespace VS
+	inline bool has_extension(const std::string& str)
 	{
-		inline bool has_extension(const std::string& str)
-		{
-			size_t sep = str.find_last_of("\\/");
-			size_t dot = str.find_last_of('.');
-			return (dot != str.npos) && (sep == str.npos || dot > sep);
-		}
+		size_t sep = str.find_last_of("\\/");
+		size_t dot = str.find_last_of('.');
+		return (dot != str.npos) && (sep == str.npos || dot > sep);
+	}
 
-		void reader(std::string& filename)
-		{
-			std::ifstream fin(filename);
-			if (!fin.is_open())
-				return;
-			
-			char ch;
+	void reader(std::string& filename)
+	{
+		std::ifstream fin(filename);
+		if (!fin.is_open())
+			return;
 
-			while (fin >> ch) {}
+		char ch;
 
-			std::cout << "Поток 2 закончил свою работу." << std::endl;
-		}
+		while (fin >> ch) {}
 
-		void writer()
-		{
-			std::string filename;
-			std::cout << "Введите имя файла: ";
-			std::getline(std::cin >> std::ws, filename);
-			if (!has_extension(filename))
-				filename += ".txt";
-			std::ofstream fout(filename);
-			if (!fout.is_open())
-				return;
+		std::cout << "Поток 2 закончил свою работу." << std::endl;
+	}
 
-			std::random_device seed_source;
-			std::mt19937 rng(seed_source());
-			std::uniform_int_distribution<uint16_t> dist(32, 126);
+	void writer()
+	{
+		std::string filename;
+		std::cout << "Введите имя файла: ";
+		std::getline(std::cin >> std::ws, filename);
+		if (!has_extension(filename))
+			filename += ".txt";
+		std::ofstream fout(filename);
+		if (!fout.is_open())
+			return;
 
-			for (uint16_t i = dist(rng); i > 0; i--)
-				fout << static_cast<char>(dist(rng));
-			fout << std::endl;
+#if defined(__GNUC__) || defined(__MINGW32__)
+		std::cout << "Random type: PCG" << std::endl;
+		pcg_extras::seed_seq_from<std::random_device> seed_source;
+		pcg32 rng(seed_source);
+		std::uniform_int_distribution<uint16_t> dist(32, 126);
+#else
+		std::cout << "Random type: MT19937" << std::endl;
+		std::random_device seed_source;
+		std::mt19937 rng(seed_source());
+		std::uniform_int_distribution<uint16_t> dist(32, 126);
+#endif
 
-			fout.close();
+		for (uint16_t i = dist(rng); i > 0; i--)
+			fout << static_cast<char>(dist(rng));
+		fout << std::endl;
 
-			std::cout << "Поток 1 создал и записал файл." << std::endl;
+		fout.close();
 
-			std::thread t(reader, std::ref(filename));
-			t.join();
+		std::cout << "Поток 1 создал и записал файл." << std::endl;
 
-			std::cout << "Поток 1 закончил свою работу." << std::endl;
-		}
+		std::thread t(reader, std::ref(filename));
+		t.join();
 
-		int main()
-		{
-			std::thread t (writer);
-			t.join();
-			std::cin.get();
-			return 0;
-		}
+		std::cout << "Поток 1 закончил свою работу." << std::endl;
+	}
+
+	int main()
+	{
+		std::thread t(writer);
+		t.join();
+		std::cin.get();
+		return 0;
 	}
 }
