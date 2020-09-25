@@ -2,6 +2,11 @@
 #define GLOBAL_LAB_HEADER_HPP
 #include <string>
 
+namespace utility
+{
+	bool has_extension(const std::string& str);
+}
+
 namespace L1
 {
 	void hello();
@@ -12,9 +17,9 @@ namespace L2
 {
 	namespace X
 	{
-		void fibonacci(const char* filename);
-		void waiter(const char* filename);
-		void sum_appender(const char* filename);
+		void fibonacci(const std::string& filename);
+		void waiter(const std::string& filename);
+		void sum_appender(const std::string& filename);
 		int main();
 	}
 	namespace Y1

@@ -12,20 +12,10 @@
 #include <thread>
 #include <algorithm>
 #include <random>
-
-#if defined(__GNUC__) || defined(__MINGW32__)
-#include "pcg/pcg_random.hpp"
-#endif
+#include <chrono>
 
 namespace L3
 {
-	inline bool has_extension(const std::string& str)
-	{
-		size_t sep = str.find_last_of("\\/");
-		size_t dot = str.find_last_of('.');
-		return (dot != str.npos) && (sep == str.npos || dot > sep);
-	}
-
 	void reader(std::string& filename)
 	{
 		std::ifstream fin(filename);
@@ -44,21 +34,13 @@ namespace L3
 		std::string filename;
 		std::cout << "Введите имя файла: ";
 		std::getline(std::cin >> std::ws, filename);
-		if (!has_extension(filename))
+		if (!utility::has_extension(filename))
 			filename += ".txt";
 		std::ofstream fout(filename);
 		if (!fout.is_open())
 			return;
 
-#if defined(__GNUC__) || defined(__MINGW32__)
-		std::cout << "Random type: PCG" << std::endl;
-		pcg_extras::seed_seq_from<std::random_device> seed_source;
-		pcg32 rng(seed_source);
-#else
-		std::cout << "Random type: MT19937" << std::endl;
-		std::random_device seed_source;
-		std::mt19937 rng(seed_source());
-#endif
+		std::minstd_rand rng(std::chrono::system_clock::now().time_since_epoch().count());
 		std::uniform_int_distribution<uint16_t> dist(32, 126);
 		for (uint16_t i = dist(rng); i > 0; i--)
 			fout << static_cast<char>(dist(rng));

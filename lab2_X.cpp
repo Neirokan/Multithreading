@@ -2,17 +2,18 @@
 #include <iostream>
 #include <fstream>
 #include <thread>
+#include <string>
 
 namespace L2
 {
 	namespace X
 	{
 		// Вычисление и вывод числе Фибоначчи
-		void fibonacci(const char* filename)
+		void fibonacci(const std::string& filename)
 		{
 			// Проверка открытия файла
 			std::ofstream fout;
-			if (filename)
+			if (!filename.empty())
 				fout.open(filename);
 			std::ostream& out = fout.is_open() ? fout : std::cout;
 
@@ -33,7 +34,7 @@ namespace L2
 		}
 
 		// Ожидает завершения вычисления чисел Фибоначчи и пишет об этом
-		void waiter(const char* filename)
+		void waiter(const std::string& filename)
 		{
 			std::thread t(fibonacci, filename);
 			t.join();
@@ -41,11 +42,11 @@ namespace L2
 		}
 
 		// Дописывает сумму чисел в файле в конец файла
-		void sum_appender(const char* filename)
+		void sum_appender(const std::string& filename)
 		{
 			// Проверка открытия файла
 			std::fstream f;
-			if (!filename || (f.open(filename, std::ios::in | std::ios::out), !f.is_open()))
+			if (filename.empty() || (f.open(filename, std::ios::in | std::ios::out), !f.is_open()))
 				return;
 
 			// Считывание и суммирование чисел
@@ -63,8 +64,11 @@ namespace L2
 		int main()
 		{
 			std::cout << "Enter file name (nothing for screen): ";
-			char filename[256];
-			std::cin.getline(filename, 256);
+			std::string filename;
+			std::getline(std::cin, filename);
+
+			if (!filename.empty() && !utility::has_extension(filename))
+				filename += ".txt";
 
 			std::thread t(waiter, filename);
 			t.join();
